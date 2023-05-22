@@ -1,21 +1,34 @@
+/* groovylint-disable-next-line CompileStatic */
 pipeline {
   agent any
   environment {
     WORKSPACE = pwd()
+    GIT_HASH_LEN = 8
   }
 
   stages {
       stage('unit-test') {
-      agent { docker 
-      { 
-        image 'golang'  
-        args '-u root' 
-      } 
+      agent {
+        docker
+      {
+          image 'golang'
+          args '-u root'
+      }
       }
       steps {
-          echo 'Unit test excuting'
-           sh 'make unit-tests'
+        echo 'Unit test excuting'
+        sh 'make unit-tests'
       }
       }
+    stage('Build') {
+      steps {
+        sh "docker build . -t regoo707/sum-service:${GIT_COMMIT.take(GIT_HASH_LEN)} ."
+        withCredentials([usernamePassword(credentialsId: 'ci-docker-login',
+         usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sh "docker login -u ${USERNAME} -p ${PASSWORD}"
+          sh "docker push regoo707/sum-service:${GIT_COMMIT.take(GIT_HASH_LEN)}"
+         }
+      }
+    }
   }
 }
