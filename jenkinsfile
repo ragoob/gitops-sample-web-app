@@ -6,7 +6,7 @@ pipeline{
 
   stages {
       stage("unit-test") {
-            agent { docker { image 'golang:alpine' } }
+            agent { docker { image 'golang' } }
             steps {
                 echo 'Unit test excuting'
                 sh 'make unit-tests'
