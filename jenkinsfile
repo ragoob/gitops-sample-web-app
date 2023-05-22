@@ -1,19 +1,18 @@
-pipeline{
+pipeline {
   agent any
   environment {
-    WORKSPACE= pwd()
-     GO114MODULE = 'on'
-     CGO_ENABLED = 0 
-     GOPATH = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
+    WORKSPACE = pwd()
   }
 
   stages {
-      stage("unit-test") {
-            agent { docker { image 'golang' } }
-            steps {
-                echo 'Unit test excuting'
-                sh 'make unit-tests'
-            }
+      stage('unit-test') {
+      agent { docker { image 'golang' } }
+      steps {
+        echo 'Unit test excuting'
+        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin", "GOBIN=${root}/bin", "GOPATH=${root}/go"]) {
+          sh 'make unit-tests'
         }
+      }
+      }
   }
 }
