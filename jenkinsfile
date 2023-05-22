@@ -2,9 +2,6 @@ pipeline {
   agent any
   environment {
     WORKSPACE = pwd()
-      GOPATH = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
-      GO114MODULE = 'on'
-      CGO_ENABLED = 0 
   }
 
   stages {
