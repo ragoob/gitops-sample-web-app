@@ -3,7 +3,6 @@ pipeline {
   agent any
   environment {
     WORKSPACE = pwd()
-    GIT_HASH_LEN = 8
   }
 
   stages {
@@ -22,11 +21,11 @@ pipeline {
       }
     stage('Build') {
       steps {
-        sh "docker build . -t regoo707/sum-service:${GIT_COMMIT.take(GIT_HASH_LEN)} ."
+        sh "docker build . -t regoo707/sum-service:${GIT_COMMIT.take(8)} ."
         withCredentials([usernamePassword(credentialsId: 'ci-docker-login',
          usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
           sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-          sh "docker push regoo707/sum-service:${GIT_COMMIT.take(GIT_HASH_LEN)}"
+          sh "docker push regoo707/sum-service:${GIT_COMMIT.take(8)}"
          }
       }
     }
