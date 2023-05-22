@@ -21,11 +21,12 @@ pipeline {
       }
     stage('Build') {
       steps {
-        sh "docker build  -t regoo707/sum-service:${GIT_COMMIT.take(8)} ."
+        def imageTage = GIT_COMMIT.take(8)
+        sh "docker build  -t regoo707/sum-service:${imageTage} ."
         withCredentials([usernamePassword(credentialsId: 'ci-docker-login',
          usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
           sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-          sh "docker push regoo707/sum-service:${GIT_COMMIT.take(8)}"
+          sh "docker push regoo707/sum-service:${imageTage}"
          }
       }
     }
