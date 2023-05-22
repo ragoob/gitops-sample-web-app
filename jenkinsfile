@@ -2,6 +2,8 @@ pipeline {
   agent any
   environment {
     WORKSPACE = pwd()
+    GOPATH = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
+
   }
 
   stages {
@@ -9,8 +11,7 @@ pipeline {
       agent { docker { image 'golang' } }
       steps {
         echo 'Unit test excuting'
-        def root = tool name: 'Go 1.20', type: 'go'
-        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin", "GOBIN=${root}/bin", "GOPATH=${root}/go"]) {
+        withEnv(["GOPATH=${GOPATH}"]) {
           sh 'make unit-tests'
         }
       }
