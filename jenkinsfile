@@ -9,7 +9,12 @@ pipeline {
 
   stages {
       stage('unit-test') {
-      agent { docker { image 'golang'  args '-u root' } }
+      agent { docker 
+      { 
+        image 'golang'  
+        args '-u root' 
+      } 
+      }
       steps {
          echo 'Unit test excuting'
           withEnv(["PATH+GO=${GOPATH}/bin"]){
