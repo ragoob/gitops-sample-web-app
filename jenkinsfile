@@ -15,9 +15,6 @@ pipeline {
           withEnv(["PATH+GO=${GOPATH}/bin"]){
             sh 'make unit-tests'
           }
-        
-         
-        
       }
       }
   }
