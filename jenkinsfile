@@ -46,13 +46,13 @@ pipeline {
                     sh "rm -rf gitops-config"
                     sh "git clone ${CONFIG_REPO_URL}"
                     sh "cd gitops-config"
-                    sh "git checkout -b promote_production"
+                    sh "git checkout -b promotion-prod-version-${GIT_COMMIT.take(8)}"
                     sh "touch mytext.txt"
                     sh "git config --global user.name '${env.GIT_CONFIG_NAME}'"
                     sh "git config --global  user.email '${env.GIT_CONFIG_EMAIL}'"
-                    sh "git add . && git commit -m 'promote production'"
+                    sh "git add . && git commit -m 'change app version to ${GIT_COMMIT.take(8)}'"
                     sh "git push --set-upstream origin promote_production"
-                    sh 'gh pr create --base main --head promote_production --title "Promote production" --body "Promote production"'
+                    sh "gh pr create --base main --head promotion-prod-version-${GIT_COMMIT.take(8)} --title \"Promote production to version ${GIT_COMMIT.take(8)}\" --body \"Promote production\""
 
                 }
       }
