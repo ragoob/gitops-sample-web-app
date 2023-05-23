@@ -43,7 +43,7 @@ pipeline {
          string(credentialsId: 'git_name', variable: 'GIT_CONFIG_NAME')
          
          ]) {
-                   cleanWs()
+                    sh "cd .."
                     sh "rm -rf gitops-config"
                     sh "git clone https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
                     sh "cd gitops-config"
