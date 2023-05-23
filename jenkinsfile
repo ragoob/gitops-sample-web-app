@@ -49,7 +49,7 @@ pipeline {
                     sh "git checkout -b promotion-prod-version-${GIT_COMMIT.take(8)}"
                     sh "touch mytext.txt"
                     sh "git add . && git commit -m 'change app version to ${GIT_COMMIT.take(8)}'"
-                    sh "git push --set-upstream origin promote_production"
+                    sh "git push --set-upstream origin promotion-prod-version-${GIT_COMMIT.take(8)}"
                     sh "gh pr create --base main --head promotion-prod-version-${GIT_COMMIT.take(8)} --title \"Promote production to version ${GIT_COMMIT.take(8)}\" --body \"Promote production\""
 
                 }
