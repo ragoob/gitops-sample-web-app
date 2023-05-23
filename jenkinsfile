@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    WORKSPACE = pwd()
+    HOME= '/tmp'
     CONFIG_REPO_URL = "https://github.com/ragoob/gitops-config.git"
   }
 
