@@ -44,17 +44,16 @@ pipeline {
          
          ]) {
                     
-                    sh "rm -rf *"
+                    sh "rm -rf * && rm -rf .git"
                     sh "git clone https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
-                    sh "cd gitops-config"
-                    sh "git remote set-url origin https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
-                    sh "git config --global user.email \"${env.GIT_CONFIG_EMAIL}\""
-                    sh "git config --global user.name  \"${env.GIT_CONFIG_NAME}\""
-                    sh "git checkout -b promotion-prod-version-${GIT_COMMIT.take(8)}"
-                    sh "echo 'test' > mytext.txt"
-                    sh "git add . && git commit -m 'change app version to ${GIT_COMMIT.take(8)}'"
-                    sh "git push --set-upstream origin promotion-prod-version-${GIT_COMMIT.take(8)}"
-                    sh "gh pr create --base main --head promotion-prod-version-${GIT_COMMIT.take(8)} --title \"Promote production to version ${GIT_COMMIT.take(8)}\" --body \"Promote production\""
+                    sh "cd gitops-config && git remote set-url origin https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
+                    sh "cd gitops-config && git config --global user.email \"${env.GIT_CONFIG_EMAIL}\""
+                    sh "cd gitops-config && git config --global user.name  \"${env.GIT_CONFIG_NAME}\""
+                    sh "cd gitops-config && git checkout -b promotion-prod-version-${GIT_COMMIT.take(8)}"
+                    sh "cd gitops-config && echo 'test' > mytext.txt"
+                    sh "cd gitops-config && git add . && git commit -m 'change app version to ${GIT_COMMIT.take(8)}'"
+                    sh "cd gitops-config && git push --set-upstream origin promotion-prod-version-${GIT_COMMIT.take(8)}"
+                    sh "cd gitops-config && gh pr create --base main --head promotion-prod-version-${GIT_COMMIT.take(8)} --title \"Promote production to version ${GIT_COMMIT.take(8)}\" --body \"Promote production\""
 
                 }
       }
