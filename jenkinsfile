@@ -35,6 +35,7 @@ pipeline {
         docker
       {
           image 'regoo707/gh'
+           args '-u root'
       }
       }
       steps {
