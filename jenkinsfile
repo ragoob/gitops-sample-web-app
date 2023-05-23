@@ -50,10 +50,10 @@ pipeline {
                     sh "git config --global user.email \"${env.GIT_CONFIG_EMAIL}\""
                     sh "git config --global user.name  \"${env.GIT_CONFIG_NAME}\""
                     sh "git checkout -b release"
-                    sh "echo 'test' > mytext.txt"
+                    sh "cd overlay/prod && sed -i \"s/^ *newTag:.*/  newTag: ${GIT_COMMIT.take(8)}/\" kustomization.yaml"
                     sh "git add . && git commit -am 'change container build version to build ${GIT_COMMIT.take(8)}'"
                     sh "git pull --rebase  https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
-                    sh "git push --set-upstream release"
+                    sh "git push https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL} release"
                     sh "gh pr create --base main --head release --fill"
                   }
                 }
