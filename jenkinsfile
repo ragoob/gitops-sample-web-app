@@ -43,7 +43,7 @@ pipeline {
          string(credentialsId: 'git_name', variable: 'GIT_CONFIG_NAME')
          
          ]) {
-                    sh "cd /"
+                    sh "rm -rf gitops-config"
                     sh "git clone ${CONFIG_REPO_URL}"
                     sh "cd gitops-config"
                     sh "git checkout -b promote_production"
