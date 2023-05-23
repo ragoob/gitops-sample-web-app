@@ -53,7 +53,6 @@ pipeline {
                     sh "echo 'test' > mytext.txt"
                     sh "git add . && git commit -am 'change container build version to build ${GIT_COMMIT.take(8)}'"
                     sh "git pull --rebase  https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
-                    sh "gh repo fork --remote-name=origin"
                     sh "git push https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL} release"
                     sh "gh pr create --base main --head release"
                   }
