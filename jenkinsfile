@@ -37,8 +37,8 @@ pipeline {
       }
       }
       steps {
-         withCredentials([string(credentialsId: 'git_hub_token', variable: 'SECRET')]) {
-                    sh "gh auth login --with-token ${env.SECRET}"
+         withCredentials([string(credentialsId: 'git_hub_token', variable: 'GH_TOKEN')]) {
+                    sh "echo ${env.GH_TOKEN}"
                     sh "gh repo list"
                 }
       }
