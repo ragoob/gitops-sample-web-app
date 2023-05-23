@@ -45,8 +45,8 @@ pipeline {
                     sh "touch mytext.txt"
                     sh "git add . && git commit -m 'promote production'"
                     sh "git push --set-upstream origin promote_production"
-                    sh "gh pr create --base main --head promote_production --title \"Promote production\" --body \"Promote production\""
-"
+                    sh 'gh pr create --base main --head promote_production --title "Promote production" --body "Promote production"'
+
                 }
       }
     }
