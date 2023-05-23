@@ -46,6 +46,8 @@ pipeline {
                     sh "rm -rf gitops-config"
                     sh "git clone ${CONFIG_REPO_URL}"
                     sh "cd gitops-config"
+                    sh "git config --global user.email \"${env.GIT_CONFIG_EMAIL}\""
+                    sh "git config --global user.name  \"${env.GIT_CONFIG_NAME}\""
                     sh "git checkout -b promotion-prod-version-${GIT_COMMIT.take(8)}"
                     sh "touch mytext.txt"
                     sh "git add . && git commit -m 'change app version to ${GIT_COMMIT.take(8)}'"
