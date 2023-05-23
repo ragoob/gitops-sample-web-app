@@ -1,4 +1,3 @@
-/* groovylint-disable-next-line CompileStatic */
 pipeline {
   agent any
   environment {
@@ -21,13 +20,26 @@ pipeline {
       }
     stage('Build') {
       steps {
-        def imageTage = GIT_COMMIT.take(8)
-        sh "docker build  -t regoo707/sum-service:${imageTage} ."
+        sh "docker build  -t regoo707/sum-service:${GIT_COMMIT.take(8)} ."
         withCredentials([usernamePassword(credentialsId: 'ci-docker-login',
          usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
           sh "docker login -u ${USERNAME} -p ${PASSWORD}"
-          sh "docker push regoo707/sum-service:${imageTage}"
+          sh "docker push regoo707/sum-service:${GIT_COMMIT.take(8)}"
          }
+      }
+    }
+
+    stage('create-master-config-pr'){
+      agent {
+        docker
+      {
+          image 'regoo707/gh'
+      }
+      }
+      steps {
+         withCredentials([string(credentialsId: 'git_hub_token', variable: 'SECRET')]) {
+                    echo "My secret: ${env.SECRET}"
+                }
       }
     }
   }
