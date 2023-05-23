@@ -43,8 +43,8 @@ pipeline {
          string(credentialsId: 'git_name', variable: 'GIT_CONFIG_NAME')
          
          ]) {
-                    sh "cd .."
-                    sh "rm -rf gitops-config"
+                    
+                    sh "rm -rf *"
                     sh "git clone https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
                     sh "cd gitops-config"
                     sh "git remote set-url origin https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
