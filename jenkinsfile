@@ -6,7 +6,7 @@ pipeline {
   }
 
   stages {
-      stage('unit-test') {
+      stage('unit tests') {
       agent {
         docker
       {
@@ -30,7 +30,40 @@ pipeline {
       }
     }
 
-    stage('create-master-config-pr'){
+ stage('change config for develop'){
+     when {
+            env.BRANCH_NAME != 'main'
+        }
+      agent {
+        docker
+      {
+          image 'regoo707/gh'
+      }
+      }
+      steps {
+         withCredentials([string(credentialsId: 'git_hub_token', variable: 'GH_TOKEN'),
+         string(credentialsId: 'git_email', variable: 'GIT_CONFIG_EMAIL'),
+         string(credentialsId: 'git_name', variable: 'GIT_CONFIG_NAME')
+         
+         ]) {
+                    
+                    sh "rm -rf * && rm -rf .git"
+                    sh "git clone https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
+                    dir('gitops-config') {
+                    sh "git config --global user.email \"${env.GIT_CONFIG_EMAIL}\""
+                    sh "git config --global user.name  \"${env.GIT_CONFIG_NAME}\""
+                    sh "cd overlay/dev && sed -i \"s/^ *newTag:.*/  newTag: ${GIT_COMMIT.take(8)}/\" kustomization.yaml"
+                    sh "git add . && git commit -am 'change container build version to build ${GIT_COMMIT.take(8)}'"
+                    sh "git push https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL} release"
+                  }
+                }
+      }
+    }
+
+    stage('change config for production'){
+     when {
+           env.BRANCH_NAME = 'main'
+        }
       agent {
         docker
       {
@@ -52,7 +85,6 @@ pipeline {
                     sh "git checkout -b release"
                     sh "cd overlay/prod && sed -i \"s/^ *newTag:.*/  newTag: ${GIT_COMMIT.take(8)}/\" kustomization.yaml"
                     sh "git add . && git commit -am 'change container build version to build ${GIT_COMMIT.take(8)}'"
-                    sh "git pull --rebase  https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL}"
                     sh "git push https://ragoob:${GH_TOKEN}@${CONFIG_REPO_URL} release"
                     sh "gh pr create --base main --head release --fill"
                   }
