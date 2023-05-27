@@ -23,6 +23,10 @@ func Sum(x int, y int) int {
 	return x + y
 }
 
+func Multiply(x int, y int) int {
+	return x * y
+}
+
 func SumHandler(w http.ResponseWriter, r *http.Request) {
 	x, err := strconv.Atoi((r.URL.Query().Get("x")))
 	if err != nil {
