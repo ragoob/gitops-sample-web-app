@@ -32,7 +32,7 @@ pipeline {
 
  stage('change config for develop'){
      when {
-            env.BRANCH_NAME != 'main'
+           expression { env.BRANCH_NAME != 'main' }
         }
       agent {
         docker
@@ -62,7 +62,7 @@ pipeline {
 
     stage('change config for production'){
      when {
-           env.BRANCH_NAME = 'main'
+          expression{ env.BRANCH_NAME = 'main' }
         }
       agent {
         docker
