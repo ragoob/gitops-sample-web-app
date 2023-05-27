@@ -85,7 +85,7 @@ pipeline {
                     sh "git checkout -b release"
                     sh "cd overlay/prod && sed -i \"s/^ *newTag:.*/  newTag: ${GIT_COMMIT.take(8)}/\" kustomization.yaml"
                     sh "git add . && git commit -am 'change container build version to build ${GIT_COMMIT.take(8)}'"
-                    sh "git push"
+                    sh "git push  --set-upstream origin release"
                     sh "gh pr create --base main --head release --fill"
                   }
                 }
